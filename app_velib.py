@@ -6,7 +6,7 @@ import plotly.express as px
 from datetime import datetime
 
 st.set_page_config(layout="wide")
-st.title("📍 JAUGE remplissage interactive Vélib’ – Data temps réel")
+st.title("📍 Qualité de service Vélib’ – Data temps réel")
 
 # URLs API Vélib'
 status_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json'
