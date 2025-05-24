@@ -21,7 +21,7 @@ if 'information_file' not in st.session_state:
 # --- 1. Boutons de mise à jour
 col1, col2 = st.columns(2)
 with col1:
-    if st.button(" STATUS 👆 JAUGES de remplissages 👆 "):
+    if st.button("Télécharge 👆 REMPLISSAGE Stations"):
         try:
             response = requests.get(status_url)
             if response.status_code == 200:
@@ -33,7 +33,7 @@ with col1:
             st.error(f"❌ Erreur de téléchargement STATUS : {e}")
 
 with col2:
-    if st.button(" INFO 👆 COORD. des stations 👆 "):
+    if st.button("Télécharge 👆 LISTE Stations"):
         try:
             response = requests.get(info_url)
             if response.status_code == 200:
