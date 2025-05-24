@@ -1,6 +1,6 @@
 # velib
 
-# 🚲 JAUGE Carte interactive Vélib’ – Données temps réel
+# 🚲 JAUGE remplissage  - Carte interactive Vélib’ – Données temps réel
 
 Cette application Streamlit vous permet de visualiser la disponibilité des vélos Vélib’ à Paris en temps réel.  
 Elle exploite les données ouvertes fournies par Smovengo via l’API officielle GBFS.
