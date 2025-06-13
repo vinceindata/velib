@@ -111,9 +111,9 @@ df['last_reported_str'] = df['last_reported'].apply(
     lambda ts: datetime.utcfromtimestamp(ts).strftime("%H:%M:%S - %d/%m/%Y")
 )
 
-# --- 5. Traitement des données
+# --- 5. Traitement des données : Calcul du taux de disponibilité
 df['availability_ratio'] = df['num_bikes_available'] / df['capacity']
-
+# --- Classification des stations selon les critères définis
 def classify(row):
     if row['num_bikes_available'] == 0:
         return "🖤 0 vélo dispo"
@@ -134,6 +134,17 @@ df["électriques"] = df["num_bikes_available_types"].apply(lambda x: x[1].get("e
 # --- 6. Affichage timestamps
 st.markdown(f"### 🕒 Mise à jour globale (lastUpdatedOther) : `{formatted_time}`")
 st.markdown("⏱️ * M. à j. ttes les 3600 sec. par Smovengo. *")
+
+# --- Légende personnalisée au-dessus de la carte
+st.markdown("""
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1rem; font-size: 1.1em;">
+    <span style="color:black;">🖤 <b>0 vélo dispo</b></span>
+    <span style="color:red;">🔴 ≤2 vélos</span>
+    <span style="color:green;">🟢 ≤40% dispo</span>
+    <span style="color:blue;">🔵 ≤80% dispo</span>
+    <span style="color:deeppink;">🌸 >80% dispo</span>
+</div>
+""", unsafe_allow_html=True)
 
 # --- 7. Affichage carte interactive
 fig = px.scatter_mapbox(
@@ -159,8 +170,16 @@ fig = px.scatter_mapbox(
     "🌸 >80% dispo": "pink"  # Ajouté : couleur rose
     },
     zoom=12,
-    height=600
+    height=700
 )
 
-fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
+# --- Suppression de la légende Plotly pour laisser place à notre légende HTML
+fig.update_layout(
+    mapbox_style="open-street-map",
+    margin={"r": 0, "t": 0, "l": 0, "b": 0},
+    showlegend=False
+)
+
+# fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
+# --- Affichage de la carte
 st.plotly_chart(fig, use_container_width=True)
