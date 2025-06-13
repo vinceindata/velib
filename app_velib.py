@@ -30,33 +30,6 @@ if 'status_file' not in st.session_state:
 if 'information_file' not in st.session_state:
     st.session_state.information_file = None
 
-"""
-# --- 1. Boutons de mise à jour
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("Télécharge 👆 REMPLISSAGE Stations"):
-        try:
-            response = requests.get(status_url)
-            if response.status_code == 200:
-                st.session_state.status_file = response.text
-                st.success("✅ Données STATUS téléchargées avec succès.")
-            else:
-                st.error(f"❌ Erreur STATUS {response.status_code}")
-        except Exception as e:
-            st.error(f"❌ Erreur de téléchargement STATUS : {e}")
-
-with col2:
-    if st.button("Télécharge 👆 LISTE Stations"):
-        try:
-            response = requests.get(info_url)
-            if response.status_code == 200:
-                st.session_state.information_file = response.text
-                st.success("✅ Données INFO téléchargées avec succès.")
-            else:
-                st.error(f"❌ Erreur INFO {response.status_code}")
-        except Exception as e:
-            st.error(f"❌ Erreur de téléchargement INFO : {e}")
-"""
 # --- 1. Interface de téléchargement
 with st.container():
     st.subheader("📥 Télécharger les données temps réel Vélib’")
