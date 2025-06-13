@@ -118,7 +118,7 @@ fig = px.scatter_mapbox(
     "🔴 ≤2 vélos": "red",
     "🟢 ≤40% dispo": "green",
     "🔵 ≤80% dispo": "blue",
-    "🌸 >80% dispo": "pink"  # Ajouté : couleur rose
+    "🌸 >80% dispo": "purple"  # Ajouté : couleur rose
     },
     zoom=12,
     height=700
