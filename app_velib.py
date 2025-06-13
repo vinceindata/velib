@@ -79,14 +79,14 @@ df['availability_ratio'] = df['num_bikes_available'] / df['capacity']
 def classify(row):
     if row['num_bikes_available'] == 0:
         return "🖤 0 vélo dispo"
-    elif 1 <= row['num_bikes_available'] <= 2:
-        return "🔴 1-2 vélos"
-    elif abs(row['availability_ratio'] - 0.4) <= 0.05:
-        return "🟢 ~40% dispo"
-    elif row['availability_ratio'] >= 0.8:
-        return "🔵 ≥80% dispo"
+    elif row['num_bikes_available'] <= 2:
+        return "🔴 ≤2 vélos"
+    elif row['availability_ratio'] <= 0.40:
+        return "🟢 ≤40% dispo"
+    elif row['availability_ratio'] <= 0.80:
+        return "🔵 ≤80% dispo"
     else:
-        return None
+        return "🌸 >80% dispo"  # rose pour plus de 80 %
 
 df['categorie'] = df.apply(classify, axis=1)
 df = df.dropna(subset=["categorie"])
@@ -114,10 +114,11 @@ fig = px.scatter_mapbox(
     },
     color="categorie",
     color_discrete_map={
-        "🖤 0 vélo dispo": "black",
-        "🔴 1-2 vélos": "red",
-        "🟢 ~40% dispo": "green",
-        "🔵 ≥80% dispo": "blue"
+    "🖤 0 vélo dispo": "black",
+    "🔴 ≤2 vélos": "red",
+    "🟢 ≤40% dispo": "green",
+    "🔵 ≤80% dispo": "blue",
+    "🌸 >80% dispo": "pink"  # Ajouté : couleur rose
     },
     zoom=12,
     height=600
