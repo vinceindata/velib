@@ -5,24 +5,13 @@ import requests
 import plotly.express as px
 from datetime import datetime
 
-# Configuration de la page
+# Configuration de la page streamlit
 st.set_page_config(layout="wide")
 st.title("📍 Qualité de service Vélib’ – Data temps réel")
 
 # URLs API Vélib'
 status_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json'
 info_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json'
-
-# CSS responsive pour mobile
-st.markdown("""
-    <style>
-    @media (max-width: 768px) {
-        .js-plotly-plot .legend {
-            display: none !important;
-        }
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # --- Initialisation de session_state
 if 'status_file' not in st.session_state:
@@ -86,6 +75,7 @@ df['last_reported_str'] = df['last_reported'].apply(
 
 # --- 5. Traitement des données : Calcul du taux de disponibilité
 df['availability_ratio'] = df['num_bikes_available'] / df['capacity']
+
 # --- Classification des stations selon les critères définis
 def classify(row):
     if row['num_bikes_available'] == 0:
@@ -100,24 +90,12 @@ def classify(row):
         return "🌸 >80% dispo"  # rose pour plus de 80 %
 
 df['categorie'] = df.apply(classify, axis=1)
-# ? df = df.dropna(subset=["categorie"])
 df["mécaniques"] = df["num_bikes_available_types"].apply(lambda x: x[0].get("mechanical", 0))
 df["électriques"] = df["num_bikes_available_types"].apply(lambda x: x[1].get("ebike", 0))
 
 # --- 6. Affichage timestamps
 st.markdown(f"### 🕒 Mise à jour globale (lastUpdatedOther) : `{formatted_time}`")
 st.markdown("⏱️ * M. à j. ttes les 3600 sec. par Smovengo. *")
-
-# --- Légende personnalisée au-dessus de la carte
-st.markdown("""
-<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1rem; font-size: 1.1em;">
-    <span style="color:black;">🖤 <b>0 vélo dispo</b></span>
-    <span style="color:red;">🔴 ≤2 vélos</span>
-    <span style="color:green;">🟢 ≤40% dispo</span>
-    <span style="color:blue;">🔵 ≤80% dispo</span>
-    <span style="color:deeppink;">🌸 >80% dispo</span>
-</div>
-""", unsafe_allow_html=True)
 
 # --- 7. Affichage carte interactive
 fig = px.scatter_mapbox(
@@ -146,13 +124,18 @@ fig = px.scatter_mapbox(
     height=700
 )
 
-# --- Suppression de la légende Plotly pour laisser place à notre légende HTML
+# Légende Plotly repositionnée au-dessus
 fig.update_layout(
     mapbox_style="open-street-map",
     margin={"r": 0, "t": 0, "l": 0, "b": 0},
-    showlegend=False
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="center",
+        x=0.5
+    )
 )
 
-# fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
 # --- Affichage de la carte
 st.plotly_chart(fig, use_container_width=True)
