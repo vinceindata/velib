@@ -24,7 +24,7 @@ info_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metro
   - "🔴 ≤2 vélos": "red",
   - "🟢 ≤40% dispo": "green",
   - "🔵 ≤80% dispo": "blue",
-  - "🌸 >80% dispo": "pink"
+  - "🌸 >80% dispo": "purple"
 
 - 📊 Détail affiché au survol : vélos mécaniques, électriques, capacité totale
 
