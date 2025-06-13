@@ -129,7 +129,7 @@ fig.update_layout(
     mapbox_style="open-street-map",
     margin={"r": 0, "t": 0, "l": 0, "b": 0},
     legend=dict(
-        orientation="h",
+        orientation="v",
         yanchor="bottom",
         y=1.02,
         xanchor="center",
