@@ -20,10 +20,11 @@ info_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metro
   - L’**heure de dernière mise à jour individuelle** pour chaque station (`last_reported`)
 
 - 📍 Carte interactive avec couleurs :
-  - 🖤 0 vélo dispo
-  - 🔴 1–2 vélos dispo
-  - 🟢 ≈ 40 % de disponibilité
-  - 🔵 ≥ 80 % de disponibilité
+  - "🖤 0 vélo dispo": "black",
+    "🔴 ≤2 vélos": "red",
+    "🟢 ≤40% dispo": "green",
+    "🔵 ≤80% dispo": "blue",
+    "🌸 >80% dispo": "pink"
 
 - 📊 Détail affiché au survol : vélos mécaniques, électriques, capacité totale
 
