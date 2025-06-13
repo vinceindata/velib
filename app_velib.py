@@ -5,6 +5,7 @@ import requests
 import plotly.express as px
 from datetime import datetime
 
+# Configuration de la page
 st.set_page_config(layout="wide")
 st.title("📍 Qualité de service Vélib’ – Data temps réel")
 
@@ -12,12 +13,24 @@ st.title("📍 Qualité de service Vélib’ – Data temps réel")
 status_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json'
 info_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json'
 
+# CSS responsive pour mobile
+st.markdown("""
+    <style>
+    @media (max-width: 768px) {
+        .js-plotly-plot .legend {
+            display: none !important;
+        }
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Initialisation de session_state
 if 'status_file' not in st.session_state:
     st.session_state.status_file = None
 if 'information_file' not in st.session_state:
     st.session_state.information_file = None
 
+"""
 # --- 1. Boutons de mise à jour
 col1, col2 = st.columns(2)
 with col1:
@@ -34,6 +47,31 @@ with col1:
 
 with col2:
     if st.button("Télécharge 👆 LISTE Stations"):
+        try:
+            response = requests.get(info_url)
+            if response.status_code == 200:
+                st.session_state.information_file = response.text
+                st.success("✅ Données INFO téléchargées avec succès.")
+            else:
+                st.error(f"❌ Erreur INFO {response.status_code}")
+        except Exception as e:
+            st.error(f"❌ Erreur de téléchargement INFO : {e}")
+"""
+# --- 1. Interface de téléchargement
+with st.container():
+    st.subheader("📥 Télécharger les données temps réel Vélib’")
+    if st.button("📊 Télécharger REMPLISSAGE Stations"):
+        try:
+            response = requests.get(status_url)
+            if response.status_code == 200:
+                st.session_state.status_file = response.text
+                st.success("✅ Données STATUS téléchargées avec succès.")
+            else:
+                st.error(f"❌ Erreur STATUS {response.status_code}")
+        except Exception as e:
+            st.error(f"❌ Erreur de téléchargement STATUS : {e}")
+
+    if st.button("🗺️ Télécharger LISTE Stations"):
         try:
             response = requests.get(info_url)
             if response.status_code == 200:
@@ -89,7 +127,7 @@ def classify(row):
         return "🌸 >80% dispo"  # rose pour plus de 80 %
 
 df['categorie'] = df.apply(classify, axis=1)
-df = df.dropna(subset=["categorie"])
+# ? df = df.dropna(subset=["categorie"])
 df["mécaniques"] = df["num_bikes_available_types"].apply(lambda x: x[0].get("mechanical", 0))
 df["électriques"] = df["num_bikes_available_types"].apply(lambda x: x[1].get("ebike", 0))
 
